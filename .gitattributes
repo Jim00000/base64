@@ -1,0 +1,29 @@
+*               text=auto
+*.md            text        diff=markdown   eof=lf
+*.c             text        diff=c          eol=lf
+*.h             text        diff=c          eol=lf
+*.cpp           text        diff=cpp        eol=lf
+*.hpp           text        diff=cpp        eol=lf
+*.txt           text                        eol=lf
+*.cmake         text                        eol=lf
+
+.gitattributes  text                        eol=lf
+.gitignore      text                        eol=lf
+LICENSE         text                        eol=lf
+
+*.o             binary
+*.obj           binary
+
+*.gch           binary
+*.pch           binary
+
+*.a             binary
+*.lib           binary
+
+*.so            binary
+*.dylib         binary
+*.dll           binary
+
+*.exe           binary
+*.out           binary
+*.app           binary
