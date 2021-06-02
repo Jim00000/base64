@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - release
+    - develop
+    - feature-ci
+  pull_request:
+    branches:
+    - develop
+
+  workflow_dispatch:
+
+jobs:
+  build-on-linux:
+    name: build on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: feature-ci
+      - name: setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.9
+        with:
+          cmake-version: '3.20.x'
+      - name: config & build
+        run: | 
+          cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -B./build -G "Unix Makefiles"
+          cmake --build ./build
+          
+  build-on-windows:
+    name: build on Windows
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: feature-ci
+      - name: setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.9
+        with:
+          cmake-version: '3.20.x'
+      - name: config & build
+        run: | 
+          cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -B./build -G "Visual Studio 16 2019" -T host=x64 -A x64
+          cmake --build ./build --config Release --target ALL_BUILDname: CI
