@@ -48,7 +48,7 @@ jobs:
       - name: Config & Build
         run: | 
           cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -B./build -G "Visual Studio 16 2019" -T host=x64 -A x64
-          cmake --build ./build --config Release --target ALL_BUILDname: CI
+          cmake --build ./build --config Release --target ALL_BUILD
       - name: Unit test (GoogleTest)
         run: |
           ./build/bin/Release/testBase64.exe
