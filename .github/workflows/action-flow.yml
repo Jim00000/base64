@@ -29,6 +29,9 @@ jobs:
         run: | 
           cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release -B./build -G "Unix Makefiles"
           cmake --build ./build
+      - name: Unit test (GoogleTest)
+        run: |
+          ./build/bin/testBase64
           
   build-on-windows:
     name: Build on Windows
@@ -46,3 +49,6 @@ jobs:
         run: | 
           cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -B./build -G "Visual Studio 16 2019" -T host=x64 -A x64
           cmake --build ./build --config Release --target ALL_BUILDname: CI
+      - name: Unit test (GoogleTest)
+        run: |
+          ./build/bin/Release/testBase64.exe
