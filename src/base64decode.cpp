@@ -21,7 +21,7 @@ copies or substantial portions of the Software.
 namespace
 {
 
-auto base64Mapper = [&] {
+auto base64Mapper = [] {
     std::unordered_map<std::string, size_t> mapper;
     for (size_t i = 0; i < Base64::base64Table.size(); i++)
         mapper.insert(std::make_pair(Base64::base64Table[i], i));
