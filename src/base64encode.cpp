@@ -69,7 +69,7 @@ std::string toBase64(const std::string &string) noexcept
 
 } // namespace
 
-const std::string Base64::encode(const std::string text) noexcept
+auto Base64::encode(const std::string& text) noexcept -> std::string
 {
     if (text.size() == 0)
         return "";

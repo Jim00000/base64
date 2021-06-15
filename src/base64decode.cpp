@@ -75,7 +75,7 @@ std::string toASCII(const std::string &base64) noexcept
 
 } // namespace
 
-const std::string Base64::decode(const std::string base64) noexcept
+auto Base64::decode(const std::string& base64) noexcept -> std::string
 {
     if (base64.size() == 0)
         return "";

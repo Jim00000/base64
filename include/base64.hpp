@@ -21,8 +21,8 @@ copies or substantial portions of the Software.
 namespace Base64
 {
 
-const std::string encode(const std::string text) noexcept;
+auto encode(const std::string& text) noexcept -> std::string;
 
-const std::string decode(const std::string base64) noexcept;
+auto decode(const std::string& base64) noexcept -> std::string;
 
 } // namespace Base64
