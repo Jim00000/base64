@@ -21,34 +21,39 @@ copies or substantial portions of the Software.
 namespace
 {
 
-std::string toBase64(const std::string &string) noexcept
+inline auto lookupTable(const uint8_t code) noexcept -> std::string
 {
-    std::string base64 = "";
-    uint8_t status;
+    return std::string(1, Base64::base64Table.at(code));
+}
+
+auto toBase64(const std::string &string) noexcept -> std::string
+{
+    std::string base64;
+    uint8_t status = 0;
 
     for (size_t i = 0; i < string.size(); i++)
     {
         status = i % 3;
-        uint8_t code;
+        uint8_t code = 0;
         if (status == 0)
         {
             code = string.at(i) >> 2;
-            base64 += Base64::base64Table.at(code);
+            base64 += lookupTable(code);
         }
         else if (status == 1)
         {
             code = string.at(i) >> 4;
             code |= (string.at(i - 1) & 0b00000011) << 4;
-            base64 += Base64::base64Table.at(code);
+            base64 += lookupTable(code);
         }
         else if (status == 2)
         {
             code = string.at(i) >> 6;
             code |= (string.at(i - 1) & 0b00001111) << 2;
-            base64 += Base64::base64Table.at(code);
+            base64 += lookupTable(code);
 
             code = string.at(i) & 0b00111111;
-            base64 += Base64::base64Table.at(code);
+            base64 += lookupTable(code);
         }
     }
 
@@ -56,12 +61,12 @@ std::string toBase64(const std::string &string) noexcept
     if (status == 0)
     {
         uint8_t code = (string.at(string.size() - 1) & 0b00000011) << 4;
-        base64 += Base64::base64Table.at(code) + "==";
+        base64 += lookupTable(code) + "==";
     }
     else if (status == 1)
     {
         uint8_t code = (string.at(string.size() - 1) & 0b00001111) << 2;
-        base64 += Base64::base64Table.at(code) + "=";
+        base64 += lookupTable(code) + "=";
     }
 
     return base64;
@@ -69,10 +74,12 @@ std::string toBase64(const std::string &string) noexcept
 
 } // namespace
 
-auto Base64::encode(const std::string& text) noexcept -> std::string
+auto Base64::encode(const std::string &text) noexcept -> std::string
 {
-    if (text.size() == 0)
+    if (text.empty())
+    {
         return "";
+    }
 
     const std::string base64 = toBase64(text);
     return base64;

@@ -38,9 +38,9 @@ inline auto toBit(const char c) noexcept -> uint8_t
     return base64Mapper.at(c);
 }
 
-std::string toASCII(const std::string &base64) noexcept
+auto toASCII(const std::string &base64) noexcept -> std::string
 {
-    std::string ascii = "";
+    std::string ascii;
     uint8_t code = 0;
     for (size_t i = 0; i < base64.size(); i++)
     {
@@ -71,18 +71,20 @@ std::string toASCII(const std::string &base64) noexcept
     /* Handle base64 postfix */
     const std::string postfix = base64.substr(base64.size() - 2, 2);
     size_t tailCut = 0;
-    tailCut += (postfix.at(0) == '=');
-    tailCut += (postfix.at(1) == '=');
+    tailCut += static_cast<size_t>(postfix.at(0) == '=');
+    tailCut += static_cast<size_t>(postfix.at(1) == '=');
 
     return ascii.substr(0, ascii.size() - tailCut);
 }
 
 } // namespace
 
-auto Base64::decode(const std::string& base64) noexcept -> std::string
+auto Base64::decode(const std::string &base64) noexcept -> std::string
 {
-    if (base64.size() == 0)
+    if (base64.empty())
+    {
         return "";
+    }
 
     const std::string ascii = toASCII(base64);
     return ascii;
