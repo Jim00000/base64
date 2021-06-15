@@ -22,10 +22,11 @@ namespace
 {
 
 const auto base64Mapper = [] {
+    using namespace Base64;
     std::unordered_map<char, uint8_t> mapper;
-    for (size_t i = 0; i < Base64::base64Table.size(); i++)
+    for (size_t i = 0; i < base64Table.size(); i++)
     {
-        const char code = Base64::base64Table.at(i).front();
+        const char code = base64Table.at(i);
         mapper[code] = i;
     }
     mapper['='] = 0;
