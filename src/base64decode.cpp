@@ -21,17 +21,20 @@ copies or substantial portions of the Software.
 namespace
 {
 
-auto base64Mapper = [] {
-    std::unordered_map<std::string, size_t> mapper;
+const auto base64Mapper = [] {
+    std::unordered_map<char, uint8_t> mapper;
     for (size_t i = 0; i < Base64::base64Table.size(); i++)
-        mapper.insert(std::make_pair(Base64::base64Table[i], i));
-    mapper.insert(std::make_pair("=", 0));
+    {
+        const char code = Base64::base64Table.at(i).front();
+        mapper[code] = i;
+    }
+    mapper['='] = 0;
     return mapper;
 }();
 
-inline const uint8_t toBit(const char c) noexcept
+inline auto toBit(const char c) noexcept -> uint8_t
 {
-    return base64Mapper[std::string(1, c)];
+    return base64Mapper.at(c);
 }
 
 std::string toASCII(const std::string &base64) noexcept
