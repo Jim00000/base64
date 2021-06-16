@@ -7,6 +7,10 @@
 *.txt           text                        eol=lf
 *.cmake         text                        eol=lf
 
+base64.nuspec   text                        eol=lf
+
+.clang-format   text                        eol=lf
+.clang-tidy     text                        eol=lf
 .gitattributes  text                        eol=lf
 .gitignore      text                        eol=lf
 LICENSE         text                        eol=lf
