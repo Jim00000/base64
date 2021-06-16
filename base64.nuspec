@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+    <metadata>
+        <id>base64</id>
+        <version>0.1.0</version>
+        <authors>Jim00000</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <license type="expression">MIT</license>
+        <projectUrl>https://github.com/Jim00000/base64</projectUrl>
+        <description>A base64 library written in C++</description>
+        <copyright>Copyright (c) 2021 Jim00000</copyright>
+        <tags>cpp base64</tags>
+    </metadata>
+    <files>
+        <file src="build\lib\Release\*.lib" exclude="build\lib\Release\gtest*.lib" target="lib" />
+        <file src="build\bin\Release\*.dll" exclude="build\bin\Release\gtest*.dll" target="runtimes" />
+        <file src="include\**\*.*" target="include" />
+        <file src="README.md" target="README.md" />
+        <file src="LICENSE" target="LICENSE" />
+    </files>
+</package>
