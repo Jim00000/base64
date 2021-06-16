@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: develop
+          ref: release
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.9
         with:
@@ -39,7 +39,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: develop
+          ref: release
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1.9
         with:
