@@ -7,6 +7,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/Jim00000/base64</projectUrl>
+        <repository type="git" url="https://github.com/Jim00000/base64.git" branch="release" />
         <description>A base64 library written in C++</description>
         <copyright>Copyright (c) 2021 Jim00000</copyright>
         <tags>cpp base64</tags>
