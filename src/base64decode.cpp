@@ -42,27 +42,57 @@ auto toASCII(const std::string &base64) noexcept -> std::string
 {
     std::string ascii;
     uint8_t code = 0;
+
+    /*
+        A table shows how to decode a base64 string :
+
+        ┌─────────────┬─────────────┬─────────────┬─────────────┐
+        │    ASCII    │    M (77)   │    a (97)   │    n (110)  │
+        ├─────────────┼─────────────┼─────────────┼─────────────┤
+        │ bit pattern │ 010011   01 │ 0110   0001 │ 01   101110 │
+        ├─────────────┼────────┬────┴──────┬──────┴────┬────────┤
+        │    Index    │ 010011 │ 01   0110 │ 0001   01 │ 101110 │
+        ├─────────────┼────────┼───────────┼───────────┼────────┤
+        │    base64   │ T (19) │   W (22)  │   F (5)   │ u (46) │
+        └─────────────┴────────┴───────────┴───────────┴────────┘
+    */
+
     for (size_t i = 0; i < base64.size(); i++)
     {
         const uint8_t status = i % 4;
         if (status == 0)
         {
+            /*
+                Decode to (3n + 1)'s ASCII code
+                e.g. M = ('T' << 2) | ('W' >> 4)
+            */
             code = (toBit(base64.at(i)) << 2);
             code |= (toBit(base64.at(i + 1)) >> 4);
             ascii += code;
         }
         else if (status == 1)
         {
+            /*
+                Decode to (3n + 2)'s ASCII code
+                e.g. a = (('W' & 0xF) << 4) | ('F' >> 2)
+            */
             code = ((toBit(base64.at(i)) & 0b001111) << 4);
             code |= (toBit(base64.at(i + 1)) >> 2);
             ascii += code;
         }
         else if (status == 2)
         {
+            /*
+                Decode to (3n + 3)'s ASCII code (first step)
+            */
             code = ((toBit(base64.at(i)) & 0b000011) << 6);
         }
         else
         {
+            /*
+                Decode to (3n + 3)'s ASCII code (second step)
+                e.g. n = ('F' << 6) | 'u'
+            */
             code |= (toBit(base64.at(i)));
             ascii += code;
         }
