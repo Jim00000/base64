@@ -26,6 +26,13 @@ inline auto lookupTable(const uint8_t code) noexcept -> std::string
     return std::string(1, Base64::base64Table.at(code));
 }
 
+inline auto getByte(const std::string &string, const size_t off) -> uint32_t
+{
+    uint32_t byte = static_cast<uint32_t>(string.at(off));
+    byte &= 0xFF;
+    return byte;
+}
+
 auto toBase64(const std::string &string) noexcept -> std::string
 {
     std::string base64;
@@ -47,7 +54,7 @@ auto toBase64(const std::string &string) noexcept -> std::string
     for (size_t i = 0; i < string.size(); i++)
     {
         status = i % 3;
-        uint8_t code = 0;
+        uint32_t code = 0;
         if (status == 0)
         {
             /*
@@ -55,7 +62,7 @@ auto toBase64(const std::string &string) noexcept -> std::string
                 e.g. we take 6 leading bits 010011 from 'M'
                 Index = ('M' >> 2)
             */
-            code = string.at(i) >> 2;
+            code = getByte(string, i) >> 2;
             base64 += lookupTable(code);
         }
         else if (status == 1)
@@ -65,8 +72,8 @@ auto toBase64(const std::string &string) noexcept -> std::string
                 e.g. we take 2 last bits 01 from 'M' and 4 leading bits 0110 from 'a'
                 Index = (('M' & 0b00000011) << 4) | ('a' >> 4)
             */
-            code = string.at(i) >> 4;
-            code |= (string.at(i - 1) & 0b00000011) << 4;
+            code = getByte(string, i) >> 4;
+            code |= (getByte(string, i - 1) & 0b00000011) << 4;
             base64 += lookupTable(code);
         }
         else if (status == 2)
@@ -78,11 +85,11 @@ auto toBase64(const std::string &string) noexcept -> std::string
                 (4n+3)-Index = (('a' & 0b00001111) << 2) | ('n' >> 6)
                 (4n+4)-Index = ('n' & 0b00111111)
             */
-            code = string.at(i) >> 6;
-            code |= (string.at(i - 1) & 0b00001111) << 2;
+            code = getByte(string, i) >> 6;
+            code |= (getByte(string, i - 1) & 0b00001111) << 2;
             base64 += lookupTable(code);
 
-            code = string.at(i) & 0b00111111;
+            code = getByte(string, i) & 0b00111111;
             base64 += lookupTable(code);
         }
     }
@@ -101,7 +108,7 @@ auto toBase64(const std::string &string) noexcept -> std::string
             │    base64   │ T (19) │   Q (16)  │   = (0)   │ = (0)  │
             └─────────────┴────────┴───────────┴───────────┴────────┘
         */
-        uint8_t code = (string.at(string.size() - 1) & 0b00000011) << 4;
+        uint32_t code = (getByte(string, string.size() - 1) & 0b00000011) << 4;
         base64 += lookupTable(code) + "==";
     }
     else if (status == 1)
@@ -117,7 +124,7 @@ auto toBase64(const std::string &string) noexcept -> std::string
             │    base64   │ T (19) │   W (22)  │   E (4)   │ = (0)  │
             └─────────────┴────────┴───────────┴───────────┴────────┘
         */
-        uint8_t code = (string.at(string.size() - 1) & 0b00001111) << 2;
+        uint32_t code = (getByte(string, string.size() - 1) & 0b00001111) << 2;
         base64 += lookupTable(code) + "=";
     }
 
@@ -133,6 +140,17 @@ auto Base64::encode(const std::string &text) noexcept -> std::string
         return "";
     }
 
-    const std::string base64 = toBase64(text);
-    return base64;
+    return toBase64(text);
+}
+
+auto Base64::encode(const std::u8string &utf8) noexcept -> std::string
+{
+    if (utf8.empty())
+    {
+        return "";
+    }
+
+    std::string bytes(utf8.cbegin(), utf8.cend());
+
+    return encode(bytes);
 }

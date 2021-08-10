@@ -23,6 +23,8 @@ namespace Base64
 
 auto encode(const std::string& text) noexcept -> std::string;
 
+auto encode(const std::u8string& text) noexcept -> std::string;
+
 auto decode(const std::string& base64) noexcept -> std::string;
 
 } // namespace Base64
